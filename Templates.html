@@ -22,9 +22,7 @@
         }
 
         /* Hide the number input arrows in Firefox */
-        input[type="number"] {
-            -moz-appearance: textfield;
-        }
+        
         .main-content{
           display:flex;
           flex-direction:column;
@@ -364,7 +362,7 @@
       }
       .Next{
         width:15px;
-        heigh:15px;
+        height:15px;
         opacity:.5;
 
       }    
@@ -664,6 +662,7 @@
     </style>
 </head>
 <body>
+  <?php include 'new_data.php'; ?>
     <div class="sidebar-container">
         <div class="sidebar">
           <nav id="sidebarMenu">
@@ -743,11 +742,11 @@
         </div>
     
                 <select id="billing-cycle">
-                    <option selected disabled>Select Category</option>
-                    <option value="MonthlSalesReport">Monthly Sales Report</option>
-                    <option value="QuarterlyIncomeStatement">Quarterly Income Statement</option>
-                    <option value="AnnualFinancialStatement">Annual Financial Statement</option>
-                    <option value="AnnualFinancialStatement">Annual Budget Planning</option>
+                  <option selected disabled>Select Category</option>
+        <option value="MonthlSalesReport">Monthly Sales Report</option>
+        <option value="QuarterlyIncomeStatement">Quarterly Income Statement</option>
+        <option value="AnnualFinancialStatement">Annual Financial Statement</option>
+        <option value="AnnualFinancialStatement">Annual Budget Planning</option>
                 </select>
       </div>
     
@@ -783,29 +782,29 @@
         <input id="spreadsheetLink" type="text" class="Category_input" placeholder="Enter Spreadsheet Link" required>
         <span class="Submit">Submit</span>
     </div>
-        <div class="Folder_section" id="createFolderModal">
-          <div class="Modal_head">
-            <div class="Modal_inner">
+    <div class="Folder_section" id="createFolderModal">
+      <div class="Modal_head">
+          <div class="Modal_inner">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-folders">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/>
-                <path d="M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2"/>
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/>
+                  <path d="M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2"/>
               </svg>
               <span>Create New Folder</span>
-            </div>
           </div>
-    
+      </div>
+  
       <select id="billing-cycle1">
-        <option selected disabled>Select Category</option>
-        <option value="MonthlSalesReport">Monthly Sales Report</option>
-        <option value="QuarterlyIncomeStatement">Quarterly Income Statement</option>
-        <option value="AnnualFinancialStatement">Annual Financial Statement</option>
-        <option value="AnnualFinancialStatement">Annual Budget Planning</option>
-        </select>
-    
-          <input id="yearInput" type="number" maxlength="4" placeholder="What year?">
-      <span class="Submit" id="submitFolder">Submit</span> <!-- Added ID here -->
-        </div>
+          <option selected disabled>Select Category</option>
+          <option value="MonthlySalesReport" data-link="https://docs.google.com/spreadsheets/d/1qNtA1cMWWrUxNSbraYUYOMjDoaKiiJUQi0U1RFwDBVA/edit?gid=1500774556#gid=1500774556">Monthly Sales Report</option>
+          <option value="QuarterlyIncomeStatement" data-link="https://docs.google.com/spreadsheets/d/10EnVz_0oerW7mkYwEP7bhAdm2BsA70_G-OFkJd7oBnQ/edit?gid=1002389743#gid=1002389743">Quarterly Income Statement</option>
+          <option value="AnnualFinancialStatement" data-link="https://docs.google.com/spreadsheets/d/1tbH4lqU8Yqu_f_sQ1OCR88iTGx3YEaX_3_Wj5J8YrFY/edit?gid=645576164#gid=645576164">Annual Financial Statement</option>
+          <option value="AnnualBudgetPlanning" data-link="https://docs.google.com/spreadsheets/d/1NgWb01MA9gSkyZZrNT7VplE9cZfKqAWs01jYyMXJmDs/edit?gid=1747215270#gid=1747215270">Annual Budget Planning</option>
+      </select>
+  
+      <input id="yearInput" type="number" maxlength="4" placeholder="What year?" min="2000" max="2099">
+      <span class="Submit" id="submitFolder">Submit</span>
+  </div>
       </div>
     
       <div class="Delete_container">
@@ -903,6 +902,133 @@
     
       </section>
       <script>
+        // Handle Folder Creation
+        async function createFolder() {
+    // Get UI elements
+    const yearInput = document.getElementById("yearInput");
+    const categoryDropdown = document.getElementById("billing-cycle1");
+    const submitBtn = document.getElementById("submitFolder");
+    const modal = document.querySelector(".Folder_modal");
+
+    // Get values
+    const year = yearInput.value.trim();
+    const selectedCategory = categoryDropdown.value;
+    const selectedOption = categoryDropdown.options[categoryDropdown.selectedIndex];
+    const selectedSpreadsheetLink = selectedOption.getAttribute("data-link");
+
+    // Validate inputs
+    if (!year || year.length !== 4 || isNaN(year) || year < 2000 || year > 2099) {
+        alert("Please enter a valid year between 2000 and 2099");
+        yearInput.focus();
+        return;
+    }
+    
+    if (!selectedCategory || selectedCategory === "Select Category") {
+        alert("Please select a category first");
+        categoryDropdown.focus();
+        return;
+    }
+    
+    if (!selectedSpreadsheetLink) {
+        alert("Selected category doesn't have a valid spreadsheet link");
+        return;
+    }
+
+    // UI feedback
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Creating...";
+    
+    try {
+        console.log(`Creating folder for year ${year} in category ${selectedCategory}`);
+        const startTime = performance.now();
+
+        const response = await fetch('new_data.php?action=createFolder', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest' // Helps identify AJAX requests
+            },
+            body: JSON.stringify({
+                folderName: year,
+                categoryName: selectedCategory,
+                spreadsheetLink: selectedSpreadsheetLink
+            }),
+            credentials: 'include' // Important for session cookies
+        });
+
+        const responseTime = performance.now() - startTime;
+        console.log(`Server responded in ${responseTime.toFixed(2)}ms`);
+
+        // First check if response is OK
+        if (!response.ok) {
+            // Try to get error details from response
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (e) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+            }
+            throw new Error(errorData.error || `Request failed with status ${response.status}`);
+        }
+
+        const result = await response.json();
+        
+        if (result.error) {
+            throw new Error(result.error);
+        }
+        
+        // Success handling
+        console.log("Folder created successfully:", result);
+        alert(`Success! Folder created for ${year}.\nFolder ID: ${result.folderId}`);
+        
+        // Reset form
+        yearInput.value = "";
+        if (modal) modal.classList.add("hidden");
+        
+        // Refresh folder list if implemented
+        if (typeof fetchAndDisplayFolders === 'function') {
+            await fetchAndDisplayFolders(selectedCategory);
+        }
+
+    } catch (error) {
+        console.error("Folder creation failed:", error);
+        
+        // Enhanced error messages
+        let userMessage = error.message;
+        if (error.message.includes("Failed to fetch")) {
+            userMessage = "Network error - please check your connection";
+        } else if (error.message.includes("Server error")) {
+            userMessage = "Server problem - please try again later";
+        }
+        
+        alert(`Error creating folder: ${userMessage}`);
+        
+        // Optionally show more details in console for debugging
+        console.debug("Full error details:", {
+            error: error,
+            year: year,
+            category: selectedCategory,
+            link: selectedSpreadsheetLink
+        });
+    } finally {
+        // Reset UI state
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit";
+    }
+}
+
+// Add event listener with debouncing to prevent double-clicks
+let debounceTimer;
+document.getElementById("submitFolder").addEventListener("click", () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(createFolder, 300);
+});
+
+
+
+
+
+
         document.addEventListener("DOMContentLoaded", function () {
           document.body.addEventListener("click", function (event) {
               if (event.target.id === "backButton") {
@@ -1161,59 +1287,6 @@
           createFolderModal.setAttribute("data-link", selectedSpreadsheetLink);
           createFolderModal.style.display = "block"; // Show modal
       });
-      
-      // Handle Folder Creation
-      function createFolder() {
-          // Get the year from the input field (note: using yearInput instead of folderName)
-          let year = document.getElementById("yearInput").value.trim();
-          
-          // Get the selected category from the dropdown
-          let categoryDropdown = document.getElementById("billing-cycle1");
-          let selectedCategory = categoryDropdown.value;
-          let selectedOption = categoryDropdown.options[categoryDropdown.selectedIndex];
-          let selectedSpreadsheetLink = selectedOption.getAttribute("data-link");
-      
-          // Validate inputs
-          if (!year || year.length !== 4 || isNaN(year)) {
-              alert("Please enter a valid 4-digit year");
-              return;
-          }
-          if (!selectedCategory || selectedCategory === "Select Category") {
-              alert("Please select a category first");
-              return;
-          }
-          if (!selectedSpreadsheetLink) {
-              alert("Selected category doesn't have a valid spreadsheet link");
-              return;
-          }
-      
-          console.log(`Creating folder for year ${year} in category ${selectedCategory}`);
-      
-          // Call Google Apps Script to create the folder
-          google.script.run
-              .withSuccessHandler(function(folderId) {
-                  if (folderId.startsWith("Error")) {
-                      alert(folderId);
-                      return;
-                  }
-                  
-                  alert(`Successfully created folder for ${year}!`);
-                  document.getElementById("yearInput").value = "";
-                  document.querySelector(".Folder_modal").classList.add("hidden");
-                  
-                  // Refresh the folder list
-                  fetchAndDisplayFolders(selectedCategory);
-              })
-              .withFailureHandler(function(error) {
-                  alert("Error creating folder: " + error.message);
-                  console.error("Error:", error);
-              })
-              .createFolder(year, selectedCategory, selectedSpreadsheetLink);
-              console.log("Created Folder ID:", folderId);
-      }
-      
-      // Add event listener to the Submit button
-      document.getElementById("submitFolder").addEventListener("click", createFolder);
       
        
       function fetchAndDisplayFolders(categoryName) {
