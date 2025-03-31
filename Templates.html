@@ -1,0 +1,2097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Report</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+        * {
+            font-family: 'Quicksand';
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Hide the number input arrows in Firefox */
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .main-content{
+          display:flex;
+          flex-direction:column;
+          gap:1rem;
+          position:relative;
+          min-height:100dvh;
+          /* clip-path: polygon(0 0, 0 0, 0 100%, 0% 100%); */
+          /* animation:entrance 1000ms ease forwards; */
+        }
+        @keyframes entrance{
+          from{}
+          to{
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+          }
+        }
+        .Intro{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          border:solid 1px #33333325;
+          padding:1rem;
+          border-radius:10px;
+        }
+        .Intro_name{
+          display:flex;
+          flex-direction:column;
+          gap:.5rem;
+          border-left:solid 2.5px #1F5497;
+          padding:.25rem .5rem .25rem 1rem;
+          color:#333;
+        }
+        .Intro_name span:nth-child(2){
+          font-size:2em;
+          font-weight:bolder;
+          color:#1f5497;
+        }
+
+        .Categories{
+          display:flex;
+          gap:1rem;
+          align-items:center;
+          border:solid 1.5px #33333350;
+          width:fit-content;
+          padding:.5rem;
+          border-radius:10px;
+        }
+        select{
+          padding:.5rem 1rem;
+          color:#333;
+          border:solid 1px #33333350;
+          border-radius:10px;
+          cursor:pointer;
+        }
+        option{
+          padding:.5rem 1rem;
+          background-color:#fff;
+          color:#1f5497;
+          cursor:pointer;
+        }
+        .Add{
+          width:45px;
+          height:45px;
+          background:none;
+          border-radius:10px;
+          border:solid 1px #1f5497;
+          color:#1f5497;
+          padding:.5rem;
+          transition:all 350ms;
+        }
+        .Add:hover{
+          background-color:#1f5497;
+          color:#fff;
+        }
+        .Add_icon{
+          width:100%;
+        }
+      .Folder_modal {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          width: 25%;
+          margin: 0 auto;
+          border: 2px solid #33333350;
+          padding: 2rem;
+          background-color: #f8f9fa;
+          border-radius: 15px;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 2;
+      }
+
+      .hidden {
+          visibility: hidden;
+      }
+      .Category_section input::placeholder{
+        font-size:.85em;
+      }
+
+      .Modal_head, .Category_head {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+      }
+
+      .Modal_inner, .Category_inner {
+          display: flex;
+          align-items: center;
+          color: #1f5497;
+      }
+
+      .Modal_inner span 
+      .Category_inner span {
+          font-size: 1.25em;
+          font-weight: 550;
+      }
+      .Modal_button{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+      }
+      .Modal_button button{
+        padding:.5rem 1rem;
+        border:none;
+        border-radius:0;
+      }
+      .Category_inside{
+        display:flex;
+        width:70%;
+      }
+      .Category_inside span{
+        padding:.5rem 1rem;
+        border:solid 1px #33333350;
+        text-align:center;
+        width:50%;
+        
+      }
+      .Btn_active{
+        color:#fff;
+        background-color:#1f5497;
+        border:none;
+      }
+
+      .Folder_modal input {
+          border: none;
+          border-bottom: 2px solid #1f549775;
+          text-align: center;
+          padding: 0.5rem 1rem;
+          font-size: 1em;
+          background-color: #f8f9fa;
+          width: 100%;
+          outline: 0;
+          color: #1f5497;
+      }
+      .Submit{
+        padding:.5rem 1rem;
+        text-align:center;
+        color:#fff;
+        background-color: #1f5497;
+        width:100%;
+        border:none;
+      }
+
+      /* .Folder_modal button {
+          padding: 0.5rem;
+          width: 100%;
+          color: #fff;
+          transition: 350ms;
+          background-color: #1f5497;
+          border-radius: 5px;
+      } */
+
+      .Created_folders{
+        display:flex;
+        gap:1rem;
+        flex-direction:column;
+      }
+      .Folder_title{
+        font-size:1.5em;
+        color:#333;
+        font-weight:bold;
+      }
+      .Folders_container,.Annually,.Quarterly, .Monthly{
+        display:flex;
+        flex-wrap:wrap;
+        gap:1rem;
+      }
+      .Annually,.Quarterly, .Monthly{
+        opacity:0;
+        filter:blur(10px);
+        animation:Appear 500ms ease forwards;
+      }
+      @keyframes Appear{
+        from{}
+        to{
+          filter:blur(0);
+          opacity:1;
+        }
+      }
+      .Folder_section, .Category_section{
+        display:flex;
+        flex-direction:column;
+        gap:1rem;
+      }
+      .Folder{
+        display:flex;
+        justify-content:space-between;
+        padding:.5rem 1rem;
+        background-color:#159F5B;
+        color:#fff;
+        width:fit-content;
+        border-radius:10px;
+        transition:all 350ms;
+        cursor:pointer;
+      }
+      .Folder:hover{
+        scale:1.025;
+        outline:solid 2px #33333350;
+      }
+      .Folder_inner{
+        display:flex;
+        align-items:center;
+      }
+      .Folder_inner span{
+        font-size:1.1em;
+        font-weight:bold;
+      }
+      .Folder details{
+        position:relative;
+        display:flex;
+        justify-content:flex-end;
+        align-items:center;
+
+      }
+      .Folder details ul{
+        position:absolute;
+        background-color:#fff;
+        border:solid 1px #33333350;
+        color:#fff;
+
+
+        display:flex;
+        flex-direction:column;
+        gap:.25rem;
+      }
+      .Folder details ul li{
+        width:100%;
+      }
+      .Folder button{
+        padding:.5rem 1rem;
+        width:100%;
+      }
+      
+      .Folder details summary {
+        list-style:none;
+      }
+      .Folder details button{
+        border:none;
+        outline:none;
+      }
+      .Delete{
+        background-color:#940000;
+        color:#fff;
+      }
+      .yearInputFolder{
+        background-color:#159F5B;
+        padding: .25rem .25rem .25rem 0;
+        border:none;
+        outline:none;
+        color:#fff;
+        font-size:1.05em;
+        cursor:pointer;
+        transition:all 350ms;
+      }
+    .Delete_container {
+        position: absolute;
+        width: 96%;
+        height: 100%;
+        background-color: rgba(51, 51, 51, 0.15); /* Slightly transparent */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99;
+        backdrop-filter: blur(1.5px); /* Apply blur effect */
+        visibility:hidden;
+        transition:all 350ms;
+    }
+
+      .Delete_modal{
+        width: 35%;
+        background-color:#fff;
+        padding:2rem;
+        display:flex;
+        flex-direction:column;
+        border-radius: 10px;
+        gap:1.5rem;
+      }
+      .First{
+        font-size:1.5em;
+        font-weight:bold;
+      }
+      .Delete_inner{
+        display:flex;
+        gap:1rem;
+      }
+      .Delete_inner span{
+        padding:.5rem 1rem;
+        cursor:pointer;
+        transition:all 350ms;
+      }
+
+
+      .Delete_inner span:first-child{
+        border:solid 1px red;
+        background-color:red;
+        color:#fff;
+      }
+
+
+      .Delete_inner span:nth-child(2){
+        border:solid 1px #1F5497;
+        color:#1F5497;
+      }
+      .Delete_container.visible {
+          visibility: visible;
+          opacity: 1;
+      }
+
+      .Quarterly, .Annually {
+        display: none;
+      }
+      .Folder_title{
+        display:flex;
+        gap:.5rem;
+        align-items:center;
+      }
+      .Next{
+        width:15px;
+        heigh:15px;
+        opacity:.5;
+
+      }    
+      #createTemplateContainer h3{
+          width:fit-content;
+        }
+
+/* File Cards Styling */
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 8px;
+}
+
+.file-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.file-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.file-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.file-icon {
+    text-align: center;
+    margin-bottom: 12px;
+    color: #4285F4;
+}
+
+.file-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.file-name {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #5f6368;
+    margin-top: auto;
+}
+
+.file-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #5f6368;
+    padding: 4px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: rgba(0,0,0,0.05);
+    color: #202124;
+}
+
+.action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.no-files-message {
+    text-align: center;
+    padding: 40px 20px;
+    color: #5f6368;
+}
+
+.no-files-message svg {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    color: #dadce0;
+}
+
+.no-files-message p {
+    margin: 8px 0 0 0;
+}
+ #createTemplateContainer h3{
+          width:fit-content;
+        }
+        /* Green square with centered white icon */
+.template-button {
+    background-color: #21a51f;  /* Bright green */
+    border: none;
+    border-radius: 10px;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s;
+}
+
+.template-button:hover {
+    background-color: #1b8c1b;
+}
+
+.template-button svg {
+    width: 60px;
+    height: 60px;
+    stroke: white;
+}
+/* Green square button */
+.template-button {
+    background-color: #21a51f;  /* Bright green */
+    border: none;
+    border-radius: 12px;  /* Slightly rounded edges */
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+}
+
+/* Hover and click effects */
+.template-button:hover {
+    background-color: #1b8c1b;
+    transform: scale(1.05);
+}
+
+.template-button:active {
+    transform: scale(0.95);
+}
+
+/* SVG icon styling */
+.template-button svg {
+    width: 50px;
+    height: 50px;
+    stroke: white;
+}
+#backButton {
+    background-color: #21a51f; /* Bright green */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    width: 120px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover and click effects */
+#backButton:hover {
+    background-color: #1b8c1b;
+    transform: scale(1.05);
+}
+
+#backButton:active {
+    transform: scale(0.95);
+}
+/* Flexbox container */
+.template-wrapper {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    gap: 20px; /* Space between elements */
+}
+
+/* Ensure temp_right doesn't shrink */
+.temp_right {
+    flex-grow: 1;
+}
+/* Add to your existing styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirmation-modal {
+  background-color: white;
+  border-radius: 10px;
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  color: #1f5497;
+  font-size: 1.3rem;
+}
+
+.modal-header svg {
+  cursor: pointer;
+}
+
+.modal-content p {
+  color: #333;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.confirm-btn {
+  background-color: #1f5497;
+  color: white;
+  border: none;
+}
+
+.hidden {
+  display: none;
+}
+.sales-data-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.sales-data-container h5 {
+    margin-bottom: 5px;
+}
+
+.sales-data-container ul {
+    margin-top: 5px;
+    padding-left: 20px;
+}
+    </style>
+</head>
+<body>
+    <div class="sidebar-container">
+        <div class="sidebar">
+          <nav id="sidebarMenu">
+            <div class="sidebarLogo menu-text">
+              <img src="https://www.stafify.com/cdn/shop/files/e50lj9u5c9xat9j7z3ne_752x.png?v=1613708232" class="menu-text" alt="Stafify Logo">
+            </div>
+            <a href="#" class="flex gap-10 items-center card-profile">
+              <div class="image-profile"><img src="https://res.cloudinary.com/dar0ewfxi/image/upload/v1740991384/profile_ec3u8q.jpg"></div>
+              <div class="details-profile menu-text">
+                <span class="profile-name"><?= username ?></span>
+                <p class="profile-dept">Department <span class="separator">-</span> Position</p>
+              </div>
+            </a>
+            <ul class="flex flex-col gap-5 sidebarMenuItems">
+              <li class="sidebarMenuItem">
+                <a href="<?= url ?>?page=index" data-page="index">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-briefcase-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 9a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v9a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-9z" /><path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2" /></svg>
+                  <span class="menu-text">Job Order</span>
+                </a>
+              </li>
+              <li class="sidebarMenuItem">
+                <a href="<?= url ?>?page=inventory" data-page="inventory">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21v-13l9 -4l9 4v13" /><path d="M13 13h4v8h-10v-6h6" /><path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" /></svg>
+                  <span class="menu-text">Inventory</span>
+                </a>
+              </li>
+              <li class="sidebarMenuItem">
+                <a href="<?= url ?>?page=analytics" data-page="analytics">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chart-scatter"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 3v18h18" /><path d="M8 15.015v.015" /><path d="M16 16.015v.015" /><path d="M8 7.03v.015" /><path d="M12 11.03v.015" /><path d="M19 11.03v.015" /></svg>
+                  <span class="menu-text">Analytics</span>
+                </a>
+              </li>
+              <li class="sidebarMenuItem">
+                <a href="<?= url ?>?page=cash-disbursement" data-page="cash-disbursement">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-coins"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 14c0 1.657 2.686 3 6 3s6 -1.343 6 -3s-2.686 -3 -6 -3s-6 1.343 -6 3z" /><path d="M9 14v4c0 1.656 2.686 3 6 3s6 -1.344 6 -3v-4" /><path d="M3 6c0 1.072 1.144 2.062 3 2.598s4.144 .536 6 0c1.856 -.536 3 -1.526 3 -2.598c0 -1.072 -1.144 -2.062 -3 -2.598s-4.144 -.536 -6 0c-1.856 .536 -3 1.526 -3 2.598z" /><path d="M3 6v10c0 .888 .772 1.45 2 2" /><path d="M3 11c0 .888 .772 1.45 2 2" /></svg>
+                  <span class="menu-text">Cash Disbursement</span>
+                </a>
+              </li>
+              <li class="sidebarMenuItem">
+                <a href="<?= url ?>?page=templates" data-page="templates">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-template"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 1a1 1 0 0 1 1 -1h14a1 1 0 0 1 1 1v2a1 1 0 0 1 -1 1h-14a1 1 0 0 1 -1 -1z" /><path d="M4 12m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" /><path d="M14 12l6 0" /><path d="M14 16l6 0" /><path d="M14 20l6 0" /></svg>
+                  <span class="menu-text">Templates</span>
+                </a>
+              </li>
+              <li class="sidebarMenuItem">
+                <button class="toggle-btn" onclick="toggleSidebar()">
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-layout-sidebar-left-collapse"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" /><path d="M9 4v16" /><path d="M15 10l-2 2l2 2" /></svg>
+                  <span class="menu-text">Collapse Sidebar</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <section class="main-content">
+
+        <div class="Intro">
+          <div class="Intro_name">
+            <span>Hi! Justine Dimalanta</span>
+            <span>Financial Report</span>
+          </div>
+    
+          <details>
+            <option>Log Out</option>
+          </details>
+        </div>
+    
+      <div class="Categories">
+        <div class="Add toggleButton"> <!-- Changed from id to class -->
+          <svg class="Add_icon" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-library-plus">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 3m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"/>
+            <path d="M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1"/>
+            <path d="M11 10h6"/>
+            <path d="M14 7v6"/>
+          </svg>
+        </div>
+    
+                <select id="billing-cycle">
+                    <option selected disabled>Select Category</option>
+                    <option value="MonthlSalesReport">Monthly Sales Report</option>
+                    <option value="QuarterlyIncomeStatement">Quarterly Income Statement</option>
+                    <option value="AnnualFinancialStatement">Annual Financial Statement</option>
+                    <option value="AnnualFinancialStatement">Annual Budget Planning</option>
+                </select>
+      </div>
+    
+    
+    
+    
+      <div class="Folder_modal hidden" id="absoluteDiv">
+        <div class="Modal_button">
+          <div class="Category_inside">
+            <span class="Btn_active" id="folderBtn">Folder</span>
+            <span id="categoryBtn">Category</span>
+          </div>
+            <svg class="toggleButton" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+              <path d="M18 6l-12 12"/>
+              <path d="M6 6l12 12"/>
+            </svg>
+        </div>
+        <div class="Category_section">
+        <div class="Category_head">
+            <div class="Category_inner">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-category-2">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M14 4h6v6h-6z"/>
+                    <path d="M4 14h6v6h-6z"/>
+                    <path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
+                    <path d="M7 7m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/>
+                </svg>
+                <span>Create New Category</span>
+            </div>
+        </div>
+        <input id="categoryName" type="text" class="Category_input" placeholder="Enter Category Name" required>
+        <input id="spreadsheetLink" type="text" class="Category_input" placeholder="Enter Spreadsheet Link" required>
+        <span class="Submit">Submit</span>
+    </div>
+        <div class="Folder_section" id="createFolderModal">
+          <div class="Modal_head">
+            <div class="Modal_inner">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-folders">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2"/>
+                <path d="M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2"/>
+              </svg>
+              <span>Create New Folder</span>
+            </div>
+          </div>
+    
+      <select id="billing-cycle1">
+        <option selected disabled>Select Category</option>
+        <option value="MonthlSalesReport">Monthly Sales Report</option>
+        <option value="QuarterlyIncomeStatement">Quarterly Income Statement</option>
+        <option value="AnnualFinancialStatement">Annual Financial Statement</option>
+        <option value="AnnualFinancialStatement">Annual Budget Planning</option>
+        </select>
+    
+          <input id="yearInput" type="number" maxlength="4" placeholder="What year?">
+      <span class="Submit" id="submitFolder">Submit</span> <!-- Added ID here -->
+        </div>
+      </div>
+    
+      <div class="Delete_container">
+        <div class="Delete_modal">
+          <span class="First">Are you sure you want to delete this folder?</span>
+          <span class="Second">This will delete the folder permanently. You cannot undo this action.</span>
+          <div class="Delete_inner">
+            <span>Confirm</span>
+            <span id="cancelDelete">Cancel</span>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Add this near your other modals (like Delete_container) -->
+    <div id="categoryConfirmationModal" class="modal-overlay hidden">
+      <div class="confirmation-modal">
+        <div class="modal-header">
+          <h3>Category Creation Notice</h3>
+          <svg class="close-modal" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M18 6l-12 12"/>
+            <path d="M6 6l12 12"/>
+          </svg>
+        </div>
+        <div class="modal-content">
+          <p>Creating a new category may incur additional charges. Are you sure you want to proceed?</p>
+        </div>
+        <div class="modal-actions">
+          <button id="cancelCategoryCreation" class="cancel-btn">Cancel</button>
+          <button id="confirmCategoryCreation" class="confirm-btn">Proceed</button>
+        </div>
+      </div>
+    </div>
+    
+      <div class="Created_folders" id="displayFolder">
+        <span class="Folder_title">
+          <span>Folders</span>
+          <svg class="Next" fill="#1f5497" height="12.5px" width="12.5px" version="1.1" id="XMLID_287_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="next"> <g> <polygon points="6.8,23.7 5.4,22.3 15.7,12 5.4,1.7 6.8,0.3 18.5,12 "></polygon> </g> </g> </g></svg>
+          <span></span>  <!-- This is where the folder name will go -->
+        </span>
+        <div id="folderDisplay" class="Folders_container"></div>
+        <div class="Folder"style="display: none;">
+            <div class="Folder_inner">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-folders"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2" /><path d="M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2" /></svg>
+            <details>
+              <summary>
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-dots-vertical"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
+              </summary>
+              <ul>
+                <li> <button id="toggleDelete" class="Delete">Delete</button> </li>
+                <li> <button class="editButton Rename">Rename</button> </li>
+              </ul>
+            </details>
+          </div>
+          </div>
+    
+    <div id="createTemplateContainer" style="display: none;">
+      <button id="backButton">Back to Folders</button>
+      <br />
+    
+      <!-- Flex container -->
+      <div class="template-wrapper">
+        <!-- Styled green square button -->
+        <button id="createTemplateBtn" class="template-button">
+          <svg class="Add_icon" xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-library-plus">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+            <path d="M7 3m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z"/>
+            <path d="M4.012 7.26a2.005 2.005 0 0 0 -1.012 1.737v10c0 1.1 .9 2 2 2h10c.75 0 1.158 -.385 1.5 -1"/>
+            <path d="M11 10h6"/>
+            <path d="M14 7v6"/>
+          </svg>
+        </button>
+    
+        <div class="temp_right">
+          <h3>Templates in Selected Folder:</h3>
+          <ul id="templateList"></ul>
+          <div id="fileList"></div>
+        </div>
+      </div>
+    </div>
+    
+    
+      </div>
+    
+    <!-- Modal for Template Creation -->
+    <div id="templateModal" class="modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); border-radius: 8px;">
+        <h3>Create New Template</h3>
+        <input type="text" id="templateNameInput" placeholder="Type in Month" style="width: 100%; padding: 8px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;">
+        
+        <div style="margin-top: 15px; text-align: right;">
+            <button id="closeModal2" style="padding: 8px 12px; margin-right: 8px; background: #ccc; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+            <button id="confirmTemplateCreation" style="padding: 8px 12px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Create</button>
+        </div>
+    </div>
+    
+      </section>
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          document.body.addEventListener("click", function (event) {
+              if (event.target.id === "backButton") {
+                  console.log("Back button clicked");
+      
+                  // Hide the createTemplateContainer
+                  const createTemplateContainer = document.getElementById("createTemplateContainer");
+                  if (createTemplateContainer) {
+                      createTemplateContainer.style.display = "none";
+                  }
+      
+                  // Show the folderDisplay using the stored previous state or default to "flex"
+                  const folderDisplay = document.getElementById("folderDisplay");
+                  if (folderDisplay) {
+                      folderDisplay.style.display = window.previousFolderDisplayState || "flex";
+                  }
+      
+                  // Reset the folder title breadcrumb - remove everything after "Folders" and first arrow
+                  const folderTitle = document.querySelector(".Folder_title");
+                  if (folderTitle) {
+                      // Keep only the first two children ("Folders" text and first arrow icon)
+                      while (folderTitle.children.length > 2) {
+                          folderTitle.removeChild(folderTitle.lastChild);
+                      }
+                      
+                      // If you want to completely reset to just "Folders" without any arrow:
+                      // folderTitle.innerHTML = '<span>Folders</span>';
+                  }
+      
+                  // Clear any selected folder
+                  selectedFolder = null;
+      
+                  // Clear the stored category if needed
+                  window.selectedCategory = null;
+      
+                  // No need to reload folders if we're just toggling visibility
+              }
+          });
+      });
+      
+        // Toggle modal visibility on click
+        document.querySelectorAll(".toggleButton").forEach(button => {
+            button.addEventListener("click", function () {
+                document.querySelector(".Folder_modal").classList.toggle("hidden");
+            });
+        });
+      
+      document.querySelectorAll(".editButton").forEach((button, index) => {
+          button.addEventListener("click", () => {
+              const input = document.querySelectorAll(".editableInput")[index]; // Get corresponding input
+              input.removeAttribute("readonly");
+              input.focus(); // Auto-focus when editing
+          });
+      });
+      
+      document.querySelectorAll(".editableInput").forEach((input, index) => {
+          input.addEventListener("blur", () => {
+              input.setAttribute("readonly", true); // Make it readonly again
+              const savedText = document.getElementById("savedText");
+              if (savedText) {
+                  savedText.textContent = "Saved Value: " + input.value; // Save value
+              }
+          });
+      
+          // Attach limitInputLength function dynamically
+          input.addEventListener("input", function () {
+              if (this.value.length > 4) {
+                  this.value = this.value.slice(0, 4);
+              }
+          });
+      });
+      
+        document.addEventListener("DOMContentLoaded", function () {
+          const folderBtn = document.getElementById("folderBtn");
+          const categoryBtn = document.getElementById("categoryBtn");
+          const folderSection = document.querySelector(".Folder_section");
+          const categorySection = document.querySelector(".Category_section");
+          const categoryModal = document.getElementById("categoryConfirmationModal");
+      
+          // Show Folder section by default
+          folderSection.style.display = "flex";
+          categorySection.style.display = "none";
+      
+          folderBtn.addEventListener("click", function () {
+              folderSection.style.display = "flex";
+              categorySection.style.display = "none";
+              folderBtn.classList.add("Btn_active");
+              categoryBtn.classList.remove("Btn_active");
+          });
+      
+          // Modified category button click handler
+          categoryBtn.addEventListener("click", function () {
+              // Show confirmation modal instead of directly showing the category section
+              categoryModal.classList.remove("hidden");
+          });
+      });
+      
+      
+      //For deleting the folder toggle
+      document.getElementById("toggleDelete").addEventListener("click", function () {
+          document.querySelector(".Delete_container").classList.toggle("visible");
+      });
+      
+      document.getElementById("cancelDelete").addEventListener("click", function () {
+          document.querySelector(".Delete_container").classList.remove("visible");
+      });
+      
+      //For toggling between Monthly, Quarterly, and Annually
+        document.addEventListener("DOMContentLoaded", function () {
+          const select = document.getElementById("billing-cycle");
+          const allDivs = document.querySelectorAll(".Monthly, .Quarterly, .Annually");
+      
+          function updateVisibility() {
+            const selectedValue = select.value; // Get selected value
+            allDivs.forEach(div => {
+              if (div.classList.contains(selectedValue)) {
+                div.style.display = "flex"; // Show the selected div
+                div.style.flexDirection = "row";
+              } else {
+                div.style.display = "none"; // Hide others
+              }
+            });
+          }
+      
+          // Set default state to "Monthly"
+          updateVisibility();
+      
+          // Listen for changes in the select box
+          select.addEventListener("change", updateVisibility);
+        });
+      
+        //--------------------------------------------------------------------
+      // Global variables to store selected category and spreadsheet link
+      let selectedCategory = "";
+      let selectedSpreadsheetLink = "";
+      let selectedFolder = null; // Add this at the top of your script file
+      
+      document.addEventListener("DOMContentLoaded", function () {
+          // Add event listener to the Submit button
+          document.querySelector(".Submit").addEventListener("click", function () {
+              createFolder();
+          });
+      });
+      
+      
+      // Function to load dropdown options from the "Categories" spreadsheet
+      function loadDropdown() {
+          google.script.run.withSuccessHandler(function (data) {
+              // Get both dropdown elements
+              let dropdown = document.getElementById("billing-cycle");
+              let dropdown1 = document.getElementById("billing-cycle1");
+              
+              // Clear both dropdowns
+              dropdown.innerHTML = "";
+              dropdown1.innerHTML = "";
+      
+              if (data.length === 0) {
+                  dropdown.innerHTML = "<option>No Data Found</option>";
+                  dropdown1.innerHTML = "<option>No Data Found</option>";
+                  return;
+              }
+      
+              let defaultOption = document.createElement("option");
+              defaultOption.textContent = "Select Category";
+              defaultOption.value = "";
+              
+              // Add default option to both dropdowns
+              dropdown.appendChild(defaultOption.cloneNode(true));
+              dropdown1.appendChild(defaultOption.cloneNode(true));
+      
+              data.forEach(function (item) {
+                  let option = document.createElement("option");
+                  option.textContent = item.name;
+                  option.value = item.name;
+                  option.setAttribute("data-link", item.link);
+                  
+                  // Add option to both dropdowns
+                  dropdown.appendChild(option.cloneNode(true));
+                  dropdown1.appendChild(option.cloneNode(true));
+              });
+          }).getDropdownData("Categories");
+      }
+      
+      // Call loadDropdown on page load
+      window.onload = loadDropdown;
+      
+      
+      
+      // Submit Category
+      function submitCategory() {
+          const categoryName = document.getElementById("categoryName").value.trim();
+          const spreadsheetLink = document.getElementById("spreadsheetLink").value.trim();
+      
+          if (!categoryName || !spreadsheetLink) {
+              alert("Please fill in all fields!");
+              return;
+          }
+      
+          const urlPattern = /^(https:\/\/docs\.google\.com\/spreadsheets\/d\/[a-zA-Z0-9-_]+)/;
+          if (!urlPattern.test(spreadsheetLink)) {
+              alert("Please enter a valid Google Sheets URL!");
+              return;
+          }
+      
+          google.script.run.withSuccessHandler(function (message) {
+              if (message.startsWith("Error")) {
+                  alert(message);
+              } else {
+                  alert(message);
+                  document.getElementById("categoryName").value = "";
+                  document.getElementById("spreadsheetLink").value = "";
+                  hideAddCategoryModal();
+                  loadDropdown(); // Reload dropdown after adding a new category
+              }
+          }).addCategory(categoryName, spreadsheetLink);
+      }
+      
+      // Add event listener to the Submit span
+      const submitButton = document.querySelector(".Submit");
+      if (submitButton) {
+          submitButton.addEventListener("click", submitCategory);
+      } else {
+          console.error("Submit button not found!");
+      }
+      
+      // Listen for dropdown selection change
+      document.getElementById("billing-cycle").addEventListener("change", function () {
+          let selectedOption = this.options[this.selectedIndex];
+      
+          if (selectedOption.value) {
+              selectedCategory = selectedOption.textContent; // Get category name
+              selectedSpreadsheetLink = selectedOption.getAttribute("data-link") || ""; // Get spreadsheet link
+      
+              console.log("Selected Category:", selectedCategory);
+              console.log("Spreadsheet Link:", selectedSpreadsheetLink);
+      
+              // Update folderBtn with the selected category and link
+              const folderBtn = document.getElementById("folderBtn");
+              folderBtn.setAttribute("data-category", selectedCategory);
+              folderBtn.setAttribute("data-link", selectedSpreadsheetLink);
+      
+              // Fetch and display folders for the selected category
+              fetchAndDisplayFolders(selectedCategory);
+          } else {
+              // Reset when "Select Category" is chosen
+              selectedCategory = "";
+              selectedSpreadsheetLink = "";
+              console.log("No category selected.");
+          }
+      });
+      
+      // Open Create Folder Modal & Pass Data
+      document.getElementById("folderBtn").addEventListener("click", function() {
+          let createFolderModal = document.getElementById("createFolderModal");
+          createFolderModal.setAttribute("data-category", selectedCategory);
+          createFolderModal.setAttribute("data-link", selectedSpreadsheetLink);
+          createFolderModal.style.display = "block"; // Show modal
+      });
+      
+      // Handle Folder Creation
+      function createFolder() {
+          // Get the year from the input field (note: using yearInput instead of folderName)
+          let year = document.getElementById("yearInput").value.trim();
+          
+          // Get the selected category from the dropdown
+          let categoryDropdown = document.getElementById("billing-cycle1");
+          let selectedCategory = categoryDropdown.value;
+          let selectedOption = categoryDropdown.options[categoryDropdown.selectedIndex];
+          let selectedSpreadsheetLink = selectedOption.getAttribute("data-link");
+      
+          // Validate inputs
+          if (!year || year.length !== 4 || isNaN(year)) {
+              alert("Please enter a valid 4-digit year");
+              return;
+          }
+          if (!selectedCategory || selectedCategory === "Select Category") {
+              alert("Please select a category first");
+              return;
+          }
+          if (!selectedSpreadsheetLink) {
+              alert("Selected category doesn't have a valid spreadsheet link");
+              return;
+          }
+      
+          console.log(`Creating folder for year ${year} in category ${selectedCategory}`);
+      
+          // Call Google Apps Script to create the folder
+          google.script.run
+              .withSuccessHandler(function(folderId) {
+                  if (folderId.startsWith("Error")) {
+                      alert(folderId);
+                      return;
+                  }
+                  
+                  alert(`Successfully created folder for ${year}!`);
+                  document.getElementById("yearInput").value = "";
+                  document.querySelector(".Folder_modal").classList.add("hidden");
+                  
+                  // Refresh the folder list
+                  fetchAndDisplayFolders(selectedCategory);
+              })
+              .withFailureHandler(function(error) {
+                  alert("Error creating folder: " + error.message);
+                  console.error("Error:", error);
+              })
+              .createFolder(year, selectedCategory, selectedSpreadsheetLink);
+              console.log("Created Folder ID:", folderId);
+      }
+      
+      // Add event listener to the Submit button
+      document.getElementById("submitFolder").addEventListener("click", createFolder);
+      
+       
+      function fetchAndDisplayFolders(categoryName) {
+          const profileName = document.querySelector(".profile-name").textContent.trim();
+          const folderDisplay = document.getElementById("folderDisplay");
+      
+          // Show loading message
+          folderDisplay.innerHTML = "<p>Loading folders...</p>";
+      
+          // Fetch folders from Google Apps Script
+          google.script.run.withSuccessHandler(function (folders) {
+              displayFolders(folders, categoryName);
+          }).getUserFolders(profileName, categoryName);
+      }
+      
+      function displayFolders(folders, selectedCategory) {
+        window.storedFolders = folders; // Store folders globally
+        window.selectedCategory = selectedCategory; // Store category globally
+      
+          const folderDisplay = document.getElementById("folderDisplay");
+          folderDisplay.innerHTML = ""; // Clear previous folders
+      
+          if (folders.length === 0) {
+              folderDisplay.innerHTML = `<p>No folders found for ${selectedCategory}.</p>`;
+              return;
+          }
+      
+          // Filter folders by selected category
+          const filteredFolders = folders.filter(folder => folder.category === selectedCategory);
+      
+          // Sort folders alphabetically by name
+          filteredFolders.sort((a, b) => a.name.localeCompare(b.name));
+      
+          // Display sorted folders
+          filteredFolders.forEach(folder => {
+              // Create folder element
+              const folderDiv = document.createElement("div");
+              folderDiv.className = "Folder";
+      
+              const folderInner = document.createElement("div");
+              folderInner.className = "Folder_inner";
+      
+              // Add folder icon
+              const folderIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+              folderIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+              folderIcon.setAttribute("width", "24");
+              folderIcon.setAttribute("height", "24");
+              folderIcon.setAttribute("viewBox", "0 0 24 24");
+              folderIcon.setAttribute("fill", "none");
+              folderIcon.setAttribute("stroke", "currentColor");
+              folderIcon.setAttribute("stroke-width", "1");
+              folderIcon.setAttribute("stroke-linecap", "round");
+              folderIcon.setAttribute("stroke-linejoin", "round");
+              folderIcon.classList.add("icon", "icon-tabler", "icons-tabler-outline", "icon-tabler-folders");
+      
+              const path1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              path1.setAttribute("stroke", "none");
+              path1.setAttribute("d", "M0 0h24v24H0z");
+              path1.setAttribute("fill", "none");
+      
+              const path2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              path2.setAttribute("d", "M9 3h3l2 2h5a2 2 0 0 1 2 2v7a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2");
+      
+              const path3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              path3.setAttribute("d", "M17 16v2a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-9a2 2 0 0 1 2 -2h2");
+      
+              folderIcon.appendChild(path1);
+              folderIcon.appendChild(path2);
+              folderIcon.appendChild(path3);
+      
+              // Add folder name
+              const folderNameInput = document.createElement("input");
+              folderNameInput.className = "yearInputFolder editableInput";
+              folderNameInput.value = folder.name;
+              folderNameInput.readOnly = true;
+      
+              // Add dropdown for actions
+              const details = document.createElement("details");
+      
+              const summary = document.createElement("summary");
+              const dotsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+              dotsIcon.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+              dotsIcon.setAttribute("width", "24");
+              dotsIcon.setAttribute("height", "24");
+              dotsIcon.setAttribute("viewBox", "0 0 24 24");
+              dotsIcon.setAttribute("fill", "none");
+              dotsIcon.setAttribute("stroke", "currentColor");
+              dotsIcon.setAttribute("stroke-width", "2");
+              dotsIcon.setAttribute("stroke-linecap", "round");
+              dotsIcon.setAttribute("stroke-linejoin", "round");
+              dotsIcon.classList.add("icon", "icon-tabler", "icons-tabler-outline", "icon-tabler-dots-vertical");
+      
+              const dotsPath1 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              dotsPath1.setAttribute("stroke", "none");
+              dotsPath1.setAttribute("d", "M0 0h24v24H0z");
+              dotsPath1.setAttribute("fill", "none");
+      
+              const dotsPath2 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              dotsPath2.setAttribute("d", "M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0");
+      
+              const dotsPath3 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              dotsPath3.setAttribute("d", "M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0");
+      
+              const dotsPath4 = document.createElementNS("http://www.w3.org/2000/svg", "path");
+              dotsPath4.setAttribute("d", "M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0");
+      
+              dotsIcon.appendChild(dotsPath1);
+              dotsIcon.appendChild(dotsPath2);
+              dotsIcon.appendChild(dotsPath3);
+              dotsIcon.appendChild(dotsPath4);
+              summary.appendChild(dotsIcon);
+      
+              const menuList = document.createElement("ul");
+              const deleteItem = document.createElement("li");
+              const deleteButton = document.createElement("button");
+              deleteButton.id = "toggleDelete";
+              deleteButton.className = "Delete";
+              deleteButton.textContent = "Delete";
+              deleteItem.appendChild(deleteButton);
+      
+              const renameItem = document.createElement("li");
+              const renameButton = document.createElement("button");
+              renameButton.className = "editButton Rename";
+              renameButton.textContent = "Rename";
+              renameItem.appendChild(renameButton);
+      
+              menuList.appendChild(deleteItem);
+              menuList.appendChild(renameItem);
+              details.appendChild(summary);
+              details.appendChild(menuList);
+      
+              // Build folder structure
+              folderInner.appendChild(folderIcon);
+              folderInner.appendChild(folderNameInput);
+              folderInner.appendChild(details);
+              folderDiv.appendChild(folderInner);
+      
+              // Add click event to the folder
+              deleteButton.addEventListener("click", function (e) {
+                  e.stopPropagation();
+                  showDeleteConfirmation(folder);
+              });
+      
+              renameButton.addEventListener("click", function (e) {
+                  e.stopPropagation(); // Prevent triggering the folder click event
+                  renameFolder(folder, folderNameInput);
+              });
+      
+              folderDiv.addEventListener("click", function (e) {
+          // Don't interfere with other interactive elements
+          if (e.target.closest("details") || e.target.closest("input")) {
+              return;
+          }
+      
+          // Update the folder title breadcrumb in the UI
+          const folderTitle = document.querySelector(".Folder_title");
+          if (folderTitle) {
+              // Clear any existing spans beyond the first two (the "Folders" text and arrow icon)
+              while (folderTitle.children.length > 2) {
+                  folderTitle.removeChild(folderTitle.lastChild);
+              }
+              
+              // Add the selected category if it exists
+              if (window.selectedCategory) {
+                  const categorySpan = document.createElement("span");
+                  categorySpan.textContent = window.selectedCategory;
+                  folderTitle.appendChild(createArrowIcon());
+                  folderTitle.appendChild(categorySpan);
+              }
+              
+              // Add the current folder name
+              folderTitle.appendChild(createArrowIcon());
+              const folderNameSpan = document.createElement("span");
+              folderNameSpan.textContent = folder.name;
+              folderTitle.appendChild(folderNameSpan);
+          }
+      
+          // Store current display state before changing it
+          const folderDisplay = document.getElementById("folderDisplay");
+          window.previousFolderDisplayState = window.getComputedStyle(folderDisplay).display;
+      
+          // Hide the folderDisplay
+          if (folderDisplay) {
+              folderDisplay.style.display = "none";
+          }
+      
+          // Show the createTemplateContainer
+          const createTemplateContainer = document.getElementById("createTemplateContainer");
+          if (createTemplateContainer) {
+              createTemplateContainer.style.display = "block";
+          }
+      
+          // Rest of your existing code...
+          selectedFolder = folder;
+          
+          // Show loading state
+          const fileList = document.getElementById("fileList");
+          if (fileList) {
+              fileList.innerHTML = "<p>Loading files...</p>";
+          }
+      
+          // Fetch and display files
+          google.script.run
+              .withSuccessHandler(displayFiles)
+              .withFailureHandler(function (error) {
+                  if (fileList) {
+                      fileList.innerHTML = "<p>Error loading files</p>";
+                  }
+                  console.error("Error loading files:", error);
+              })
+              .getFilesInFolder(folder.id);
+      });
+      
+              // Add this to your folderDiv creation:
+              folderDiv.setAttribute("data-id", folder.id);
+              folderDisplay.appendChild(folderDiv);
+          });
+      }
+      
+      // Helper function to create the arrow icon
+      function createArrowIcon() {
+          const arrowIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          arrowIcon.className = "Next";
+          arrowIcon.setAttribute("fill", "#1f5497");
+          arrowIcon.setAttribute("height", "12.5px");
+          arrowIcon.setAttribute("width", "12.5px");
+          arrowIcon.setAttribute("viewBox", "0 0 24 24");
+          arrowIcon.innerHTML = `<g id="next"><g><polygon points="6.8,23.7 5.4,22.3 15.7,12 5.4,1.7 6.8,0.3 18.5,12"></polygon></g></g>`;
+          return arrowIcon;
+      }
+      
+      // Call when the page loads
+      document.addEventListener("DOMContentLoaded", function() {
+          fetchAndDisplayFolders(""); // Initially load all folders
+      });
+      
+      // Show the template creation modal when createTemplateContainer is clicked
+      document.getElementById("createTemplateBtn").addEventListener("click", function () {
+          document.getElementById("templateModal").style.display = "block";
+      });
+      
+      // Close the modal when the close button is clicked
+      document.getElementById("closeModal2").addEventListener("click", function () {
+          document.getElementById("templateModal").style.display = "none";
+      });
+      
+      // Handle template creation logic when the create button is clicked
+      document.getElementById("confirmTemplateCreation").addEventListener("click", function () {
+          const templateName = document.getElementById("templateNameInput").value.trim();
+      
+          if (templateName === "") {
+              alert("Please enter a valid template name.");
+              return;
+          }
+      
+          // Call the function to create the template
+          createTemplate(templateName);
+      
+          // Close the modal after creation
+          document.getElementById("templateModal").style.display = "none";
+      });
+      // Add this to your existing JavaScript
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get elements
+        const categoryBtn = document.getElementById("categoryBtn");
+        const folderSection = document.querySelector(".Folder_section");
+        const categorySection = document.querySelector(".Category_section");
+        const categoryModal = document.getElementById("categoryConfirmationModal");
+        const closeModalBtn = categoryModal.querySelector(".close-modal");
+        const cancelBtn = document.getElementById("cancelCategoryCreation");
+        const confirmBtn = document.getElementById("confirmCategoryCreation");
+      
+        // Show confirmation modal when category button is clicked
+        categoryBtn.addEventListener("click", function() {
+          // Show the confirmation modal
+          categoryModal.classList.remove("hidden");
+        });
+      
+        // Close modal when X is clicked
+        closeModalBtn.addEventListener("click", function() {
+          categoryModal.classList.add("hidden");
+        });
+      
+        // Close modal when cancel is clicked
+        cancelBtn.addEventListener("click", function() {
+          categoryModal.classList.add("hidden");
+        });
+      
+        // Proceed with category creation when confirmed
+        confirmBtn.addEventListener("click", function() {
+          // Hide the confirmation modal
+          categoryModal.classList.add("hidden");
+          
+          // Show the category section (your existing functionality)
+          folderSection.style.display = "none";
+          categorySection.style.display = "flex";
+          document.getElementById("folderBtn").classList.remove("Btn_active");
+          categoryBtn.classList.add("Btn_active");
+        });
+      
+        // Close modal when clicking outside the modal content
+        categoryModal.addEventListener("click", function(e) {
+          if (e.target === categoryModal) {
+            categoryModal.classList.add("hidden");
+          }
+        });
+      });
+      
+      function createTemplate(templateName) {
+          if (!selectedFolder) {
+              alert("Please select a folder first.");
+              return;
+          }
+      
+          // Use the global spreadsheet link if selectedFolder.spreadsheetURL is missing
+          const spreadsheetURL = selectedFolder.spreadsheetURL || selectedSpreadsheetLink;
+      
+          if (!spreadsheetURL) {
+              alert("No spreadsheet template found. Please check the category selection.");
+              return;
+          }
+      
+          const createButton = document.getElementById("confirmTemplateCreation");
+          createButton.disabled = true; // Disable button to prevent multiple clicks
+      
+          google.script.run.withSuccessHandler(function(message) {
+              alert(message);
+              
+              // Reset the modal UI
+              resetTemplateModal();
+              
+              if (!message.includes("Error:")) {
+                  // Fetch and display the updated list of files in the folder
+                  fetchAndDisplayFiles(selectedFolder.id);
+              }
+          }).withFailureHandler(function(error) {
+              alert("Error: " + error.message);
+              createButton.disabled = false; // Re-enable button on failure
+          }).createTemplateInFolder(selectedFolder.id, templateName, spreadsheetURL);
+      }
+      
+      function resetTemplateModal() {
+          // Clear the input field
+          document.getElementById("templateNameInput").value = "";
+          
+          // Re-enable the create button
+          document.getElementById("confirmTemplateCreation").disabled = false;
+          
+          // Hide the modal
+          hideCreateTemplateModal();
+      }
+      
+      function hideCreateTemplateModal() {
+          document.getElementById("templateModal").style.display = "none";
+      }
+      
+      function displayFiles(files) {
+          const fileListContainer = document.getElementById("fileList");
+      
+          if (!fileListContainer) {
+              console.error("Error: 'fileList' element not found in the DOM.");
+              return;
+          }
+      
+          fileListContainer.innerHTML = ""; // Clear previous files
+      
+          if (files.length === 0) {
+              fileListContainer.innerHTML = `<p>No documents found in this folder.</p>`;
+              return;
+          }
+      
+          const filesGrid = document.createElement("div");
+          filesGrid.className = "files-grid";
+      
+          files.forEach(file => {
+              const fileCard = document.createElement("div");
+              fileCard.className = "file-card";
+      
+              const fileName = document.createElement("h4");
+              fileName.className = "file-name";
+              fileName.textContent = file.name;
+              fileName.title = file.name;
+      
+              const fileLink = document.createElement("a");
+              fileLink.href = file.url;
+              fileLink.target = "_blank";
+              fileLink.className = "file-link";
+              fileLink.setAttribute("aria-label", `Open ${file.name}`);
+      
+              // Open file and extract data when clicked
+              fileLink.addEventListener("click", async (event) => {
+                  event.preventDefault(); // Prevent default link behavior
+                  console.log(`Opening file: ${file.name} from category: ${selectedCategory}`);
+      
+                  // Get folderName from file data
+                  const folderName = file.folderName || "Unknown Folder"; 
+                  console.log(`File belongs to folder: ${folderName}`);
+      
+                  // For Monthly Sales Report, do special processing
+                  if (selectedCategory === "Monthly Sales Report") {
+                      try {
+                          // Extract all totals, including discount totals
+                          const extractedTotals = await extractDatesFromFile(file.id);
+                          const jobOrdersDiscountData = await getJobOrdersDiscountData();
+      
+                          if (!extractedTotals || Object.keys(extractedTotals).length === 0) {
+                              console.warn(`No sumTotals found for ${file.name}`);
+                              window.open(file.url, "_blank");
+                              return;
+                          }
+      
+                          console.log(`Extracted Totals from ${file.name}:`, extractedTotals);
+                          console.log(`Extracted Discounts from ${file.name}:`, jobOrdersDiscountData);
+      
+                          // Merge discount data into extractedTotals before pasting
+                          for (const date in extractedTotals) {
+                              if (jobOrdersDiscountData[date]) {
+                                  extractedTotals[date].discount = jobOrdersDiscountData[date] || 0;
+                              }
+                          }
+      
+                          console.log(`Final Data to Paste for ${file.name}:`, extractedTotals);
+      
+                          // ✅ Pass folderName when fixing weeks & days
+                          google.script.run.correctWeeklyDates(file.id, folderName);
+                          google.script.run.pasteSumTotalToSheet(file.id, extractedTotals);
+                      } catch (error) {
+                          console.error(`Error processing ${file.name}:`, error);
+                      }
+                  }
+                  
+                  // For all categories (including after special processing), open the file
+                  window.open(file.url, "_blank");
+              });
+      
+              fileCard.appendChild(fileName);
+              fileLink.appendChild(fileCard);
+              filesGrid.appendChild(fileLink);
+          });
+      
+          fileListContainer.appendChild(filesGrid);
+      }
+      
+      
+      // Helper function to format currency
+      function formatCurrency(amount) {
+          return new Intl.NumberFormat('en-PH', {
+              style: 'currency',
+              currency: 'PHP'
+          }).format(amount);
+      }
+      
+      // Function to call the server-side function to get sales data
+      async function getSalesDataFromFile(fileId) {
+          return new Promise((resolve, reject) => {
+              google.script.run
+                  .withSuccessHandler(resolve)
+                  .withFailureHandler(reject)
+                  .extractSalesData(fileId);
+          });
+      }
+      
+      
+      // Function to call the server-side function for cash disbursements
+      async function getCashDisbursementData() {
+          return new Promise((resolve, reject) => {
+              google.script.run
+                  .withSuccessHandler(resolve)
+                  .withFailureHandler(reject)
+                  .getCashDisbursementTotalsByDate();
+          });
+      }
+      
+      // Function to get job orders discount data
+      async function getJobOrdersDiscountData() {
+          return new Promise((resolve, reject) => {
+              google.script.run
+                  .withSuccessHandler(resolve)
+                  .withFailureHandler(reject)
+                  .getJobOrdersDiscountTotalsByDate();
+          });
+      }
+      
+      // Function to extract and filter dates from a file
+      async function extractDatesFromFile(fileId) {
+          return new Promise((resolve, reject) => {
+              google.script.run
+                  .withSuccessHandler((data) => {
+                      if (!data || !data.filteredTotals) {
+                          console.error("No valid data extracted.");
+                          resolve({});
+                          return;
+                      }
+      
+                      console.log("Extracted Totals:", data.filteredTotals);
+                      resolve(data.filteredTotals);
+                  })
+                  .withFailureHandler((error) => {
+                      console.error("Error extracting sumTotals:", error);
+                      reject(error);
+                  })
+                  .extractAndFilterDates(fileId);
+          });
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      function formatTimestamp(timestamp) {
+          return new Date(timestamp).toLocaleString('en-SG', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              timeZone: 'Asia/Singapore'
+          });
+      }
+      
+      // Helper functions for file display
+      function getFileIcon(fileType) {
+          const type = (fileType || '').toLowerCase();
+          const iconMap = {
+              'pdf': 'M4 4v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8.342a2 2 0 0 0-.602-1.43l-4.44-4.342A2 2 0 0 0 13.56 2H6a2 2 0 0 0-2 2z',
+              'document': 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6',
+              'spreadsheet': 'M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6 M12 18v-4 M8 18v-2 M16 18v-6',
+              'image': 'M4 16l4.586-4.586a2 2 0 0 1 2.828 0L16 16m-2-2l1.586-1.586a2 2 0 0 1 2.828 0L20 14m-6-6h.01M6 20h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z'
+          };
+      
+          let iconPath = iconMap.document; // Default icon
+          if (type.includes('pdf')) iconPath = iconMap.pdf;
+          if (type.includes('sheet') || type.includes('excel')) iconPath = iconMap.spreadsheet;
+          if (type.includes('image') || type.includes('jpg') || type.includes('png')) iconPath = iconMap.image;
+      
+          return `
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="${iconPath}"></path>
+              </svg>
+          `;
+      }
+      
+      function truncateFileName(name, maxLength) {
+          if (name.length <= maxLength) return name;
+          return name.substring(0, maxLength) + '...';
+      }
+      
+      function formatFileSize(bytes) {
+          if (!bytes) return '0 Bytes';
+          const k = 1024;
+          const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+          const i = Math.floor(Math.log(bytes) / Math.log(k));
+          return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+      }
+      
+      
+      function fetchAndDisplayFiles(folderId) {
+          console.log("Fetching files for folder:", folderId); // Debugging log
+      
+          google.script.run
+              .withSuccessHandler(displayFiles)
+              .withFailureHandler(function (error) {
+                  console.error("Error fetching files:", error);
+                  document.getElementById("fileList").innerHTML = "<p>Error fetching files.</p>";
+              })
+              .getFilesInFolder(folderId);
+      }
+      
+      function onFolderSelect(folder) {
+          selectedFolder = folder;
+          if (folder && folder.id) {
+            console.log("Selected Folder ID:", folder.id);
+              fetchAndDisplayFiles(folder.id); // Fetch and display files
+          }
+      
+          // Hide the "Create Template" container initially
+          const createTemplateContainer = document.getElementById("createTemplateContainer");
+          createTemplateContainer.style.display = "none";
+      
+          // Clear the file list before loading new files
+          const fileList = document.getElementById("fileList");
+          fileList.innerHTML = "<p>Loading files...</p>";
+      
+          if (folder && folder.id) {
+              fetchAndDisplayFiles(folder.id); // Fetch and display files
+      
+              // Show "Create Template" after a slight delay (ensures smooth UI)
+              setTimeout(() => {
+                  createTemplateContainer.style.display = "block";
+              }, 300);
+          } else {
+              fileList.innerHTML = "<p>No folder selected.</p>";
+          }
+      }
+      
+      
+      
+      function hideCreateTemplateModal() {
+          const modal = document.getElementById("createTemplateModal"); // Assuming your modal has this ID
+          if (modal) {
+              modal.style.display = "none"; // Hide the modal
+          } else {
+              console.error("Modal element not found!");
+          }
+      }
+      
+      document.getElementById("categoryDropdown").addEventListener("change", function () {
+          let selectedOption = this.options[this.selectedIndex];
+      
+          if (selectedOption.value) {
+              selectedCategory = selectedOption.textContent;
+              selectedSpreadsheetLink = selectedOption.getAttribute("data-link") || "";
+      
+              console.log("Selected Category:", selectedCategory);
+              console.log("Spreadsheet Link:", selectedSpreadsheetLink);
+      
+              // 🔹 Show folders and hide the template container
+              document.getElementById("folderDisplay").style.display = "block"; // Ensure folders are visible
+              document.getElementById("folderDisplay").innerHTML = "<p>Loading folders...</p>";
+              document.getElementById("createTemplateContainer").style.display = "none"; // Hide template section
+      
+              // 🔹 Clear file list
+              document.getElementById("fileList").innerHTML = "";
+      
+              // 🔹 Fetch and display folders
+              fetchAndDisplayFolders(selectedCategory);
+          } else {
+              // Reset when "Select Category" is chosen
+              selectedCategory = "";
+              selectedSpreadsheetLink = "";
+              
+              document.getElementById("folderDisplay").innerHTML = "<p>Please select a category to see folders.</p>";
+              document.getElementById("folderDisplay").style.display = "block"; // Ensure folders section is visible
+              document.getElementById("fileList").innerHTML = "";
+              document.getElementById("createTemplateContainer").style.display = "none"; // Hide template section
+      
+              console.log("No category selected.");
+          }
+      });
+      
+      
+      function refreshFolderList(categoryName) {
+          const profileName = document.querySelector(".profile-name").textContent.trim();
+          const folderDisplay = document.getElementById("folderDisplay");
+      
+          folderDisplay.innerHTML = "<p>Refreshing folder list...</p>"; // Temporary loading text
+      
+          google.script.run.withSuccessHandler(function (folders) {
+              displayFolders(folders, categoryName);
+          }).getUserFolders(profileName, categoryName);
+      }
+      
+      document.addEventListener("DOMContentLoaded", function () {
+          // Get modal and close button
+          const createFolderModal = document.getElementById("createFolderModal");
+          const closeModal = document.getElementById("closeModal");
+      
+          // Close modal when clicking the close button
+          closeModal.addEventListener("click", function () {
+              createFolderModal.style.display = "none";
+          });
+      
+          // Optional: Close modal when clicking outside of modal content
+          window.addEventListener("click", function (event) {
+              if (event.target === createFolderModal) {
+                  createFolderModal.style.display = "none";
+              }
+          });
+      });
+      
+      function renameFolder(folder, inputElement) {
+          // Enable editing of the input field
+          inputElement.readOnly = false;
+          inputElement.focus();
+          
+          // Select all text for easy editing
+          inputElement.setSelectionRange(0, inputElement.value.length);
+          
+          // Handle when user finishes editing
+          const handleRenameComplete = async () => {
+              const newName = inputElement.value.trim();
+              
+              if (!newName) {
+                  alert("Folder name cannot be empty");
+                  inputElement.value = folder.name; // Revert to original name
+                  inputElement.readOnly = true;
+                  return;
+              }
+              
+              if (newName === folder.name) {
+                  inputElement.readOnly = true; // No change needed
+                  return;
+              }
+              
+              try {
+                  // Show loading state
+                  inputElement.disabled = true;
+                  
+                  // Call server-side function to rename the folder
+                  const result = await new Promise((resolve, reject) => {
+                      google.script.run
+                          .withSuccessHandler(resolve)
+                          .withFailureHandler(reject)
+                          .renameFolder(folder.id, newName, folder.category);
+                  });
+                  
+                  if (result.success) {
+                      // Update all references to the folder name
+                      folder.name = newName;
+                      
+                      // Update selectedFolder if it's the same folder
+                      if (selectedFolder && selectedFolder.id === folder.id) {
+                          selectedFolder.name = newName;
+                      }
+                      
+                      // Optional: Show success message
+                      console.log("Folder renamed successfully:", newName);
+                  } else {
+                      alert(result.message || "Error renaming folder");
+                      inputElement.value = folder.name; // Revert to original name
+                  }
+              } catch (error) {
+                  console.error("Error renaming folder:", error);
+                  alert("Failed to rename folder: " + error.message);
+                  inputElement.value = folder.name; // Revert to original name
+              } finally {
+                  inputElement.readOnly = true;
+                  inputElement.disabled = false;
+              }
+          };
+          
+          // Set up event listeners for completion
+          inputElement.addEventListener("blur", handleRenameComplete);
+          inputElement.addEventListener("keypress", function(e) {
+              if (e.key === "Enter") {
+                  handleRenameComplete();
+              }
+          });
+          
+          // Clean up event listeners after rename is complete
+          const cleanUp = () => {
+              inputElement.removeEventListener("blur", handleRenameComplete);
+              inputElement.removeEventListener("keypress", handleRenameComplete);
+          };
+          
+          // One-time cleanup after rename completes
+          inputElement.addEventListener("blur", cleanUp, { once: true });
+          inputElement.addEventListener("keypress", function(e) {
+              if (e.key === "Enter") cleanUp();
+          }, { once: true });
+      }
+      
+      function showDeleteConfirmation(folder) {
+          const deleteContainer = document.querySelector(".Delete_container");
+          
+          // Update modal content
+          deleteContainer.innerHTML = `
+              <div class="Delete_modal">
+                  <span class="First">Delete ${folder.name}?</span>
+                  <span class="Second">This will permanently delete the folder and its contents.</span>
+                  <div class="Delete_inner">
+                      <span class="confirm-delete">Delete</span>
+                      <span class="cancel-delete">Cancel</span>
+                  </div>
+              </div>`;
+          
+          // Add event listeners
+          deleteContainer.querySelector(".confirm-delete").addEventListener("click", () => {
+              deleteContainer.innerHTML = "<div class='Delete_modal'><p>Deleting folder...</p></div>";
+              deleteFolder(folder);
+          });
+          
+          deleteContainer.querySelector(".cancel-delete").addEventListener("click", () => {
+              deleteContainer.classList.remove("visible");
+          });
+          
+          // Show modal
+          deleteContainer.classList.add("visible");
+      }
+      
+      async function deleteFolder(folder) {
+          try {
+              // Call server-side function
+              const result = await new Promise((resolve, reject) => {
+                  google.script.run
+                      .withSuccessHandler(resolve)
+                      .withFailureHandler(reject)
+                      .deleteFolder(folder.id, folder.category);
+              });
+      
+              if (result.success) {
+                  // Remove folder from UI
+                  const folderElements = document.querySelectorAll(".Folder");
+                  folderElements.forEach(element => {
+                      const input = element.querySelector(".yearInputFolder"); // Get the input field
+                      if (input && input.value === folder.name) { // Ensure input exists
+                          element.remove();
+                      }
+                  });
+      
+                  // Hide template container if it was showing this folder
+                  const templateContainer = document.getElementById("createTemplateContainer");
+                  if (templateContainer && templateContainer.style.display === "block") {
+                      templateContainer.style.display = "none";
+                  }
+      
+                  // Show success message
+                  alert(`"${folder.name}" was deleted successfully`);
+      
+                  // ✅ Refresh the folder list
+                  refreshFolderList(folder.category);
+              } else {
+                  alert(result.message || "Failed to delete folder");
+              }
+          } catch (error) {
+              console.error("Delete error:", error);
+              alert("Error during deletion: " + error.message);
+          } finally {
+              // Reset delete modal
+              document.querySelector(".Delete_container").classList.remove("visible");
+          }
+      }
+      
+      // Add an event listener to the "Submit" button
+      document.getElementById("submitFolder").addEventListener("click", function () {
+          // Hide the modal immediately
+          const createFolderModal = document.getElementById("createFolderModal");
+          if (createFolderModal) {
+              createFolderModal.style.display = "none";
+          }
+      
+          // Show a loading spinner or message
+          const loadingMessage = document.createElement("div");
+          loadingMessage.textContent = "Creating folder...";
+          document.body.appendChild(loadingMessage);
+      
+          // Get the input value
+          const yearInput = document.getElementById("yearInput").value;
+      
+          // Simulate an asynchronous operation (e.g., API call)
+          setTimeout(() => {
+              if (yearInput && yearInput.length === 4) {
+                  console.log("Creating folder for year:", yearInput);
+      
+                  // Clear the input field
+                  document.getElementById("yearInput").value = "";
+      
+                  // Remove the loading message
+                  loadingMessage.remove();
+              } else {
+                  // Show an error message
+                  alert("Please enter a valid 4-digit year.");
+      
+                  // Show the modal again
+                  if (createFolderModal) {
+                      createFolderModal.style.display = "block";
+                  }
+      
+                  // Remove the loading message
+                  loadingMessage.remove();
+              }
+          }, 2000); // Simulate a 2-second delay
+      });
+      
+      // Reset the folder title text
+      const folderTitle = document.querySelector(".Folder_title span:last-child");
+      if (folderTitle) {
+          folderTitle.textContent = ""; // Clear the folder name
+          // OR if you want to restore the default text:
+          // folderTitle.textContent = "Folders"; 
+      }
+      
+      </script>
+
+</body>
+</html>
